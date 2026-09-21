@@ -1,0 +1,171 @@
+{
+  "source_document": "graph-intro.pdf",
+  "description": "Labeled eval set for testing RAG retrieval quality. For each entry, run the question through your retrieval step and check whether the retrieved chunk(s) actually contain the source_snippet — that's your hit-rate/Precision@k signal. Compare the LLM's generated answer to expected_answer for faithfulness.",
+  "usage_notes": [
+    "difficulty='exact': answer is a direct definition lookup — should be easy to retrieve correctly.",
+    "difficulty='paraphrase': question is worded differently than the source text — tests whether your embedding model captures semantic similarity, not just keyword overlap.",
+    "difficulty='synthesis': answer requires combining info from more than one sentence/section — tests whether your chunk size/overlap preserves enough context, and whether top-k > 1 is needed."
+  ],
+  "eval_pairs": [
+    {
+      "id": 1,
+      "question": "What is the formal definition of a directed graph?",
+      "expected_answer": "A directed graph (digraph) is a pair G = (V, A) where V is a set of vertices and A is a subset of V x V, a set of directed edges (arcs).",
+      "source_page": 152,
+      "source_snippet": "a directed graph or (digraph) is a pair G = (V, A) where V is a set of vertices (or nodes), and A ⊆ V × V is a set of directed edges (or arcs)",
+      "difficulty": "exact"
+    },
+    {
+      "id": 2,
+      "question": "How is an undirected graph formally defined, and why can't it have self loops?",
+      "expected_answer": "An undirected graph is a pair G = (V, E) where E is a set of unordered pairs {u, v}. Self loops aren't possible because {v, v} = {v}, which isn't a valid element of the edge set (defined as unordered pairs of two distinct vertices).",
+      "source_page": 153,
+      "source_snippet": "an undirected graph is a pair G = (V, E) where V is a set of vertices... E ⊆ (V choose 2) is a set of edges... an undirected graph cannot have self loops since {v, v} = {v} not in (V choose 2)",
+      "difficulty": "synthesis"
+    },
+    {
+      "id": 3,
+      "question": "Why are graphs considered more expressive than trees for representing relationships?",
+      "expected_answer": "Trees cannot have cycles or multiple paths between two nodes, while graphs can, making graphs more general and expressive.",
+      "source_page": 151,
+      "source_snippet": "Graphs are more interesting than other abstractions such as tree... because graphs are more expressive. For example, in a tree, tree cannot be cycles, and multiple paths between two nodes.",
+      "difficulty": "exact"
+    },
+    {
+      "id": 4,
+      "question": "What's the difference between an in-neighbor and an out-neighbor in a directed graph?",
+      "expected_answer": "For a directed graph, u is an in-neighbor of v if (u, v) is an edge, and u is an out-neighbor of v if (v, u) is an edge.",
+      "source_page": 154,
+      "source_snippet": "For a directed graph a vertex u is an in-neighbor of a vertex v if (u, v) ∈ E and an out-neighbor if (v, u) ∈ E",
+      "difficulty": "exact"
+    },
+    {
+      "id": 5,
+      "question": "How is the degree of a vertex defined, and how does it differ for directed graphs?",
+      "expected_answer": "The degree of a vertex is the size of its neighborhood. For directed graphs, this splits into in-degree (size of in-neighborhood) and out-degree (size of out-neighborhood).",
+      "source_page": 154,
+      "source_snippet": "The degree dG(v) of a vertex v ∈ V in a graph G = (V, E) is the size of the neighborhood |NG(v)|. For directed graphs we use in-degree... and out-degree",
+      "difficulty": "exact"
+    },
+    {
+      "id": 6,
+      "question": "What separates a path from a simple path?",
+      "expected_answer": "A path is a sequence of adjacent vertices (repeats allowed). A simple path has no repeated vertices.",
+      "source_page": 154,
+      "source_snippet": "A path in a graph is a sequence of adjacent vertices... A simple path is a path with no repeated vertices.",
+      "difficulty": "exact"
+    },
+    {
+      "id": 7,
+      "question": "Why must an undirected cycle have a minimum length of three?",
+      "expected_answer": "The document states this as a requirement for simple cycles in undirected graphs but poses it as an exercise for the reader to reason through rather than stating the reason directly — worth flagging as a question the model shouldn't fabricate an answer for if that section isn't retrieved.",
+      "source_page": 155,
+      "source_snippet": "has no repeated vertices other than the first and last, and has length at least three... Why is important in a undirected graph to require that a cycle has length at least three?",
+      "difficulty": "synthesis"
+    },
+    {
+      "id": 8,
+      "question": "What makes a graph a forest versus a tree?",
+      "expected_answer": "An undirected graph with no cycles is a forest; if it's also connected, it's a tree.",
+      "source_page": 155,
+      "source_snippet": "An undirected graph with no cycles is a forest and if it is connected it is called a tree.",
+      "difficulty": "exact"
+    },
+    {
+      "id": 9,
+      "question": "What's a DAG?",
+      "expected_answer": "A directed acyclic graph (DAG) is a directed graph with no cycles.",
+      "source_page": 155,
+      "source_snippet": "A directed graph with no cycles is a directed acyclic graph (DAG).",
+      "difficulty": "exact"
+    },
+    {
+      "id": 10,
+      "question": "How are distance and diameter defined for a graph?",
+      "expected_answer": "Distance from u to v is the shortest path length between them. Diameter is the maximum shortest path length over all pairs of vertices in the graph.",
+      "source_page": 155,
+      "source_snippet": "The distance δG(u, v) from a vertex u to a vertex v... is the shortest path... The diameter of a graph is the maximum shortest path length over all pairs of vertices",
+      "difficulty": "exact"
+    },
+    {
+      "id": 11,
+      "question": "When is a graph considered sparse versus dense?",
+      "expected_answer": "A graph is informally sparse if the number of edges m is much less than n^2 (n being the number of vertices), and dense otherwise.",
+      "source_page": 155,
+      "source_snippet": "We informally say that a graph is sparse if m ≪ n^2 and dense otherwise.",
+      "difficulty": "exact"
+    },
+    {
+      "id": 12,
+      "question": "Give three real-world applications of graphs mentioned in the text.",
+      "expected_answer": "Examples include social network graphs (e.g. Twitter follower graphs), transportation networks (road/public transit systems), and protein-protein interaction graphs.",
+      "source_page": 156,
+      "source_snippet": "Social network graphs... Transportation networks... Protein-protein interactions graphs",
+      "difficulty": "synthesis"
+    },
+    {
+      "id": 13,
+      "question": "In document link graphs, what do vertices and edges represent?",
+      "expected_answer": "Each web page is a vertex, and each hyperlink is a directed edge.",
+      "source_page": 156,
+      "source_snippet": "the link graph of the web, where each web page is a vertex, and each hyperlink a directed edge",
+      "difficulty": "exact"
+    },
+    {
+      "id": 14,
+      "question": "What is the main drawback of representing a graph with an adjacency matrix?",
+      "expected_answer": "Its space demand is Theta(n^2), which is wasteful for sparse graphs that have far fewer edges than n^2.",
+      "source_page": 159,
+      "source_snippet": "The main problem with adjacency matrices is their space demand of Θ(n^2). Graphs are often sparse, with far fewer edges than Θ(n^2).",
+      "difficulty": "exact"
+    },
+    {
+      "id": 15,
+      "question": "Why are adjacency lists poorly suited for parallel algorithms?",
+      "expected_answer": "Because traversing the neighbors of a vertex in an adjacency list requires sequentially walking a linked list.",
+      "source_page": 159,
+      "source_snippet": "Adjacency lists are not well suited for parallelism since the lists require that we traverse the neighbors of a vertex sequentially.",
+      "difficulty": "paraphrase"
+    },
+    {
+      "id": 16,
+      "question": "How does an adjacency array differ structurally from an adjacency list?",
+      "expected_answer": "An adjacency array stores all vertices' neighbors consecutively in one array, plus a separate index array marking where each vertex's neighbor block starts — rather than using pointers to linked lists like an adjacency list.",
+      "source_page": 159,
+      "source_snippet": "an adjacency array keeps the neighbors of all vertices, one after another, in an array adj; and separately, keeps an array of indices",
+      "difficulty": "synthesis"
+    },
+    {
+      "id": 17,
+      "question": "What is an edge list?",
+      "expected_answer": "A list of vertex pairs (i, j) that are in the edge set E.",
+      "source_page": 159,
+      "source_snippet": "Edge list. A list of pairs (i, j) ∈ E.",
+      "difficulty": "exact"
+    },
+    {
+      "id": 18,
+      "question": "Why does the book use edge sets and adjacency tables instead of low-level structures like arrays or linked lists?",
+      "expected_answer": "To keep the representation abstract (based on sets and tables) so parallel operations apply more easily, and so vertices don't need to be restricted to labels 1 through n.",
+      "source_page": 160,
+      "source_snippet": "we take a more abstract view of the representation of graphs... This makes it easier to apply parallel operations to the graphs. It also allows us to use arbitrary sets of vertices",
+      "difficulty": "synthesis"
+    },
+    {
+      "id": 19,
+      "question": "Why are edge sets inefficient for finding all neighbors of a vertex, even though they're efficient for checking if a specific edge exists?",
+      "expected_answer": "Checking if an edge exists is a direct lookup (O(log n) work), but finding all neighbors of a vertex requires filtering the entire edge set for matches, which takes Theta(m) work.",
+      "source_page": 160,
+      "source_snippet": "edge sets are efficient for finding, inserting, or deleting an edge, they are not efficient if we want to identify the neighbors of a vertex... requires a filter... For m edges this requires Θ(m) work",
+      "difficulty": "synthesis"
+    },
+    {
+      "id": 20,
+      "question": "What is the work and span cost of accessing the neighbors of a vertex using an adjacency table?",
+      "expected_answer": "O(log n) work and O(log n) span, since it's just a lookup in the table.",
+      "source_page": 160,
+      "source_snippet": "accessing the out neighbors of a vertex v is cheap since it just requires a lookup in the table. Assuming the tree cost model for tables, this can be done in O(log n) work and span.",
+      "difficulty": "exact"
+    }
+  ]
+}
